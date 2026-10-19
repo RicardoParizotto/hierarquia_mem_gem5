@@ -79,7 +79,6 @@ cache_hierarchy = PrivateL1SharedL2CacheHierarchy(
 
 
 # Politica aplicada apos criacao, pois a stdlib nao aceita no construtor
-repl = REPLACEMENT_POLICIES[args.repl_policy]()
 for l1d in cache_hierarchy.l1dcaches:
     l1d.replacement_policy = REPLACEMENT_POLICIES["LRU"]
 for l1i in cache_hierarchy.l1icaches:
