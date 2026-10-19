@@ -57,13 +57,6 @@ parser.add_argument(
 args = parser.parse_args()
 binary_path = os.path.abspath(args.binary)
 
-REPLACEMENT_POLICIES = {
-    "LRU":      LRURP,
-    "Random":   RandomRP,
-    "TreePLRU": TreePLRURP,
-    "FIFO":     FIFORP,
-    "MRU":      MRURP,
-}
 
 # 1. Escolhemos o modelo O3 (Out-of-Order) para RISC-V
 processor = SimpleProcessor(cpu_type=CPUTypes.O3, num_cores=1, isa=ISA.RISCV)
@@ -76,14 +69,6 @@ cache_hierarchy = PrivateL1SharedL2CacheHierarchy(
     l1i_assoc=2,
     l2_assoc=2,
 )
-
-
-# Politica aplicada apos criacao, pois a stdlib nao aceita no construtor
-for l1d in cache_hierarchy.l1dcaches:
-    l1d.replacement_policy = REPLACEMENT_POLICIES["LRU"]
-for l1i in cache_hierarchy.l1icaches:
-    l1i.replacement_policy = REPLACEMENT_POLICIES["LRU"]
-cache_hierarchy.l2cache.replacement_policy = REPLACEMENT_POLICIES["LRU"]
 
 #montagem da memoria principal
 memory = SingleChannelDDR4_2400("8GB")
