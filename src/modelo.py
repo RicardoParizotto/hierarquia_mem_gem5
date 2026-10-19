@@ -71,7 +71,7 @@ processor = SimpleProcessor(cpu_type=CPUTypes.O3, num_cores=1, isa=ISA.RISCV)
 # 2. Configurao de Memoria e Cache (Obrigatrio para O3)
 # Associatividade: 1=mapeamento direto, 2, 4, 8...)
 cache_hierarchy = PrivateL1SharedL2CacheHierarchy(
-    l1d_size="32kB", l1i_size="32kB", l2_size="256kB",
+    l1d_size="4kB", l1i_size="4kB", l2_size="16kB",
     l1d_assoc=2,
     l1i_assoc=2,
     l2_assoc=2,
@@ -81,11 +81,12 @@ cache_hierarchy = PrivateL1SharedL2CacheHierarchy(
 # Política aplicada após criação, pois a stdlib não aceita no construtor
 repl = REPLACEMENT_POLICIES[args.repl_policy]()
 for l1d in cache_hierarchy.l1dcaches:
-    l1d.replacement_policy = "LRU"
+    l1d.replacement_policy = REPLACEMENT_POLICIES["LRU"]
 for l1i in cache_hierarchy.l1icaches:
-    l1i.replacement_policy = "LRU"
-cache_hierarchy.l2cache.replacement_policy = "LRU"
+    l1i.replacement_policy = REPLACEMENT_POLICIES["LRU"]
+cache_hierarchy.l2cache.replacement_policy = REPLACEMENT_POLICIES["LRU"]
 
+#montagem da memoria principal
 memory = SingleChannelDDR4_2400("8GB")
 
 # 3. Montagem da placa
